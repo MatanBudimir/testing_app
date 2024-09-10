@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo-app
+  labels:
+    app: echo-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: echo-app
+  template:
+    metadata:
+      labels:
+        app: echo-app
+    spec:
+      containers:
+      - name: busybox-container
+        image: busybox
+        command: ["/bin/sh", "-c", "app.sh"]
+        volumeMounts:
+        - name: script-dir
+          mountPath: /
+      volumes:
+      - name: script-dir
+        gitRepo:
+          repository: "https://github.com/MatanBudimir/testing_app.git"
+          revision: "main"
+          directory: "."
